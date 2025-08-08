@@ -1,4 +1,4 @@
-package advent_2022.AoC5;
+package src.main.java.advent2022.Day05;
 
 import java.util.ArrayList;
 import java.util.List;

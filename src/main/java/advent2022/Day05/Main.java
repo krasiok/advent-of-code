@@ -1,4 +1,4 @@
-package advent_2022.AoC5;
+package src.main.java.advent2022.Day05;
 
 public class Main {
     public static void main(String[] args){

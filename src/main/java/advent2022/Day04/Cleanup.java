@@ -42,3 +42,12 @@ public class Cleanup {
         }
     }
 }
+
+class Elf {
+
+    int start, end;
+
+    public boolean isContained(Elf elf) {
+        return false;
+    }
+}

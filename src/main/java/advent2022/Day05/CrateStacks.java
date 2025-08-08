@@ -1,4 +1,4 @@
-package advent_2022.AoC5;
+package src.main.java.advent2022.Day05;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -12,7 +12,7 @@ public class CrateStacks {
 
     public CrateStacks() {
         List<String> lines = new ArrayList<>();
-        try (BufferedReader input = new BufferedReader(new FileReader("src/advent_2022/AoC5/stackToParse.txt"))) {
+        try (BufferedReader input = new BufferedReader(new FileReader("src/main/java/advent2022/Day05/stackToParse.txt"))) {
             String line;
             while ((line = input.readLine()) != null) {
                 lines.add(line);

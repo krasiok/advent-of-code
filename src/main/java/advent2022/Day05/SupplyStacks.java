@@ -1,4 +1,4 @@
-package advent_2022.AoC5;
+package src.main.java.advent2022.Day05;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,7 +10,7 @@ public class SupplyStacks {
     CrateStacks stacks = new CrateStacks();
     public void run() {
 
-        try (BufferedReader input = new BufferedReader(new FileReader("src/advent_2022/AoC5/input.txt"))) {
+        try (BufferedReader input = new BufferedReader(new FileReader("src/main/java/advent2022/Day05/input.txt"))) {
             String line;
             while((line = input.readLine()) != null){
                String[] moveFromTo = line.split( "[^\\d]+");
