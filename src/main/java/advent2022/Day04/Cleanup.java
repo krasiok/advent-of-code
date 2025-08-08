@@ -1,4 +1,4 @@
-package advent_2022.AoC4;
+package src.main.java.advent2022.Day04;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ public class Cleanup {
     }
 
     public void run() {
-        final String filePath = "src/advent_2022/AoC4/input.txt";
+        final String filePath = "src/main/java/advent2022/Day04/input.txt";
         int counter = 0;
         int counter2 = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
