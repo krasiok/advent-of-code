@@ -17,14 +17,12 @@ public class Main {
         Pattern filePattern = Pattern.compile("^(\\d+)");
         String tmp;
         int finalCounter1 = 0;
-        int finalCounter2 = 0;
         int totalSize = 70000000;
         int neededSize = 30000000;
 
-
         try (BufferedReader br = new BufferedReader(new FileReader("src/advent_2022/AoC7/input.txt"))) {
             String line;
-            String previousPath = "";
+            String fullPath = "";
             List<String> previous = new ArrayList<>();
 
             while ((line = br.readLine()) != null) {
@@ -33,17 +31,14 @@ public class Main {
                     String tmpValue = matcher2.group();
                     int value = Integer.parseInt(tmpValue);
 
-                    // POPRAWKA 1: Dodaj rozmiar do aktualnego katalogu i wszystkich nadrzędnych
-                    String currentFullPath = previousPath;
+                    String currentFullPath = fullPath;
                     while (!currentFullPath.isEmpty()) {
                         if (pathSize.containsKey(currentFullPath)) {
-                            pathSize.put(currentFullPath, pathSize.get(currentFullPath) + value); // DODAJ zamiast nadpisywać
+                            pathSize.put(currentFullPath, pathSize.get(currentFullPath) + value);
                         }
 
-                        // Przejdź do katalogu nadrzędnego
                         int lastSlash = currentFullPath.lastIndexOf('/');
                         if (lastSlash <= 0) {
-                            // Jesteśmy w root, dodaj do "/" i zakończ
                             if (pathSize.containsKey("/")) {
                                 pathSize.put("/", pathSize.get("/") + value);
                             }
@@ -61,65 +56,54 @@ public class Main {
 
                         if (matched.equals("/")) {
                             tmp = "/";
-                            previousPath = "/"; // POPRAWKA 2: Ustaw previousPath na "/" dla root
-                        } else if (previousPath.endsWith("/")) {
+                            fullPath = "/";
+                        } else if (fullPath.endsWith("/")) {
                             tmp = matched;
-                            previousPath += tmp;
+                            fullPath += tmp;
                         } else {
                             tmp = "/" + matched;
-                            previousPath += tmp;
+                            fullPath += tmp;
                         }
 
-                        previous.add(matched.equals("/") ? "/" : tmp); // POPRAWKA 3: Dodaj właściwą wartość
+                        previous.add(matched.equals("/") ? "/" : tmp);
 
-                        if (!pathSize.containsKey(previousPath)) {
-                            pathSize.put(previousPath, 0);
+                        if (!pathSize.containsKey(fullPath)) {
+                            pathSize.put(fullPath, 0);
                         }
                     }
 
                     if (line.contains("$ cd ..")) {
                         if (!previous.isEmpty()) {
-                            String toRemove = previous.get(previous.size() - 1);
-                            // POPRAWKA 4: Lepsze usuwanie z końca ścieżki
+                            String toRemove = previous.getLast();
                             if (toRemove.equals("/")) {
-                                previousPath = "";
+                                fullPath = "";
                             } else {
-                                previousPath = previousPath.substring(0, previousPath.lastIndexOf(toRemove));
+                                fullPath = fullPath.substring(0, fullPath.lastIndexOf(toRemove));
                             }
-                            previous.remove(previous.size() - 1);
+                            previous.removeLast();
                         }
                     }
                 }
             }
-            int tmp42 = totalSize - pathSize.get("/");
-            int min = 0;
 
+            int min = Integer.MAX_VALUE;
             for (Map.Entry<String, Integer> entry : pathSize.entrySet()) {
-                String key = entry.getKey();
                 Integer value = entry.getValue();
-                if(totalSize-pathSize.get("/")+value>=neededSize){
-
-                    if(finalCounter2==0) {
+                if (totalSize - pathSize.get("/") + value >= neededSize) {
+                    if (min > value) {
                         min = value;
-                        finalCounter2++;
                     }
-                    if(min>value){
-                        min=value;
-                    }
-
                 }
                 if (value <= 100000) {
                     finalCounter1 += value;
                 }
-
             }
+
             System.out.println("Rozmiar katalogu root '/': " + pathSize.get("/"));
-
-
-            System.out.println("Part 1: "+finalCounter1);
-            System.out.println("Part 2: "+min);
+            System.out.println("Part 1: " + finalCounter1);
+            System.out.println("Part 2: " + min);
         } catch (IOException e) {
-            System.err.println("Could not write the file");
+            System.err.println("Could not read the file");
         }
     }
 }
