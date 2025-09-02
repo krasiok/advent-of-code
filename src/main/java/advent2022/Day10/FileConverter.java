@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FileConverter {
+public class FileConverter{
+
     public List<Command> getListFromInput() {
         List<Command> commands = new ArrayList<>();
         String regex = "^(\\w+)\\s*(-?\\d+)?$";

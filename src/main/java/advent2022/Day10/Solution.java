@@ -12,12 +12,24 @@ public class Solution {
     int x = 1;
     int sum = 0;
 
+    private void crtDraw() {
+        int horizontalPosition = (cycle - 1) % 40;
+        if (horizontalPosition >= x - 1 && horizontalPosition <= x + 1) {
+            System.out.print("#");
+        } else {
+            System.out.print(".");
+        }
+        if (horizontalPosition == 39) {
+            System.out.println();
+        }
+    }
+
     private void cycleCondition(int times) {
         for (int i = 0; i < times; i++) {
             cycle++;
+            crtDraw();
             if (checkSignalStrength.contains(cycle)) {
                 sum += x * cycle;
-
             }
         }
     }
