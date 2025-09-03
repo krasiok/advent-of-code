@@ -1,19 +1,14 @@
 package advent_2022.AoC12;
 
 public class Position {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
     public Position(int x, int y){
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
+    public int getX() { return x; }
+    public int getY() { return y; }
 }
