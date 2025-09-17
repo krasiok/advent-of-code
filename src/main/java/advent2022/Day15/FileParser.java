@@ -13,7 +13,7 @@ public class FileParser {
         List<Position> sensors = new ArrayList<>();
         List<Position> beacons = new ArrayList<>();
         List<Integer> ranges = new ArrayList<>();
-        String regex = "x=(\\d+), y=(\\d+)";
+        String regex = "x=(-?\\d+), y=(-?\\d+)";
         Pattern pattern = Pattern.compile(regex);
 
         try(BufferedReader br = new BufferedReader(new FileReader("src/advent_2022/AoC15/input.txt"))){
