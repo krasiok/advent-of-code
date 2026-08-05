@@ -52,6 +52,7 @@ public class Solution {
 
         int maxPressure = 0;
 
+
         for(Map.Entry<String,TargetBox> entry : valveTarget.entrySet()){
 
             Set<String> newVisited = new HashSet<>(visited);
@@ -64,17 +65,19 @@ public class Solution {
             String startName = connection.substring(0,2);
             String destinationName = connection.substring(connection.length() - 2);
 
-            if(startName.equals(room)) {
-                if (distance < time && !newVisited.contains(destinationName)) {
-                    int remainingTime = time - distance - openingTime;
-                    int tmpPressure = remainingTime * flowRate;
-                    newVisited.add(destinationName);
-                    tmpPressure += chooseBestWay(destinationName, remainingTime, newVisited);
-                    if (tmpPressure > maxPressure) {
-                        maxPressure = tmpPressure;
+
+                if (startName.equals(room)) {
+                    if (distance < time && !newVisited.contains(destinationName)) {
+                        int remainingTime = time - distance - openingTime;
+                        int tmpPressure = remainingTime * flowRate;
+                        newVisited.add(destinationName);
+                        tmpPressure += chooseBestWay(destinationName, remainingTime, newVisited);
+                        if (tmpPressure > maxPressure) {
+                            maxPressure = tmpPressure;
+                        }
                     }
                 }
-            }
+
 
         }
         return maxPressure;
@@ -85,6 +88,20 @@ public class Solution {
         Set<String> initialVisited = new HashSet<>();
         initialVisited.add("AA");
         int maxPressure = chooseBestWay("AA",30, initialVisited);
+        Set<String> uniqueValves = new HashSet<>();
+        for(Map.Entry<String,TargetBox> entry : valveTarget.entrySet()){
+            int flowRate = entry.getValue().getFlowRate();
+            String destinationName = entry.getKey().substring(entry.getKey().length() - 2);
+            if(flowRate>0){
+                uniqueValves.add(destinationName);
+            }
+        }
+        List<String> valuableValves = new ArrayList<>(uniqueValves);
+
+
+
+
+
         System.out.println(maxPressure);
     }
 
