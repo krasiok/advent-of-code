@@ -6,26 +6,25 @@ public class Solution {
     FileParser fileParser = new FileParser();
     List<Valve> valves = fileParser.inputToVaultConnections("src/main/java/advent_2022/AoC16/input.txt");
     Queue<DistanceBox> checkNeighboursDistanceQueue = new LinkedList<>();
-    //    Map<String, Integer> valveDistance = new HashMap<>();
     Map<String, TargetBox> valveTarget = new HashMap<>();
     Set<Valve> logbook = new HashSet<>();
 
     private void checkAndSaveDistance() {
-        for(Valve valve : valves) {
+        for (Valve valve : valves) {
             String startName = valve.getValveName();
             checkNeighboursDistanceQueue.add(new DistanceBox(valve, 0));
             logbook.add(valve);
             while (!checkNeighboursDistanceQueue.isEmpty()) {
                 DistanceBox valveBox = checkNeighboursDistanceQueue.poll();
-                int distance = valveBox.getDistance();
+                int distance = valveBox.distance() + 1;
 
-                for (Valve neighbour : getNeighbours(valveBox.getValve())) {
+                for (Valve neighbour : getNeighbours(valveBox.valve())) {
                     if (!logbook.contains(neighbour)) {
                         logbook.add(neighbour);
                         if (neighbour.getFlowRate() > 0) {
-                            valveTarget.put(startName + "->" + neighbour.getValveName(), new TargetBox(distance + 1, neighbour.getFlowRate()));
+                            valveTarget.put(startName + "->" + neighbour.getValveName(), new TargetBox(distance, neighbour.getFlowRate()));
                         }
-                        checkNeighboursDistanceQueue.add(new DistanceBox(neighbour, distance + 1));
+                        checkNeighboursDistanceQueue.add(new DistanceBox(neighbour, distance));
                     }
                 }
 
@@ -48,35 +47,36 @@ public class Solution {
         return neighbours;
     }
 
-    private int chooseBestWay(String room, int time, Set<String> visited){
+    private int chooseBestWay(String room, int time, Set<String> visited) {
 
         int maxPressure = 0;
 
 
-        for(Map.Entry<String,TargetBox> entry : valveTarget.entrySet()){
+        for (Map.Entry<String, TargetBox> entry : valveTarget.entrySet()) {
 
             Set<String> newVisited = new HashSet<>(visited);
 
             TargetBox targetBox = entry.getValue();
-            int distance = targetBox.getDistance();
-            int flowRate = targetBox.getFlowRate();
+            int distance = targetBox.distance();
+            int flowRate = targetBox.flowRate();
             int openingTime = 1;
+
             String connection = entry.getKey();
-            String startName = connection.substring(0,2);
+            String startName = connection.substring(0, 2);
             String destinationName = connection.substring(connection.length() - 2);
 
 
-                if (startName.equals(room)) {
-                    if (distance < time && !newVisited.contains(destinationName)) {
-                        int remainingTime = time - distance - openingTime;
-                        int tmpPressure = remainingTime * flowRate;
-                        newVisited.add(destinationName);
-                        tmpPressure += chooseBestWay(destinationName, remainingTime, newVisited);
-                        if (tmpPressure > maxPressure) {
-                            maxPressure = tmpPressure;
-                        }
+            if (startName.equals(room)) {
+                if (distance < time && !newVisited.contains(destinationName)) {
+                    int remainingTime = time - distance - openingTime;
+                    int tmpPressure = remainingTime * flowRate;
+                    newVisited.add(destinationName);
+                    tmpPressure += chooseBestWay(destinationName, remainingTime, newVisited);
+                    if (tmpPressure > maxPressure) {
+                        maxPressure = tmpPressure;
                     }
                 }
+            }
 
 
         }
@@ -87,20 +87,15 @@ public class Solution {
         checkAndSaveDistance();
         Set<String> initialVisited = new HashSet<>();
         initialVisited.add("AA");
-        int maxPressure = chooseBestWay("AA",30, initialVisited);
+        int maxPressure = chooseBestWay("AA", 30, initialVisited);
         Set<String> uniqueValves = new HashSet<>();
-        for(Map.Entry<String,TargetBox> entry : valveTarget.entrySet()){
-            int flowRate = entry.getValue().getFlowRate();
+        for (Map.Entry<String, TargetBox> entry : valveTarget.entrySet()) {
+            int flowRate = entry.getValue().flowRate();
             String destinationName = entry.getKey().substring(entry.getKey().length() - 2);
-            if(flowRate>0){
+            if (flowRate > 0) {
                 uniqueValves.add(destinationName);
             }
         }
-        List<String> valuableValves = new ArrayList<>(uniqueValves);
-
-
-
-
 
         System.out.println(maxPressure);
     }
